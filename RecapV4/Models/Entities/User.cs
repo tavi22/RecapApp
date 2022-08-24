@@ -8,7 +8,7 @@ namespace RecapV4.Models.Entities
 
         public string FirstName { get; set; }
 
-        public string SecondName { get; set; }
+        public string LastName { get; set; }
 
         public ICollection<UserRole> UserRoles { get; set; }
 

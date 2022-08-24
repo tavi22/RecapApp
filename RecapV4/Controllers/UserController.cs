@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using RecapV4.Repositories;
+using RecapV4.Services.UserServices;
 
 namespace RecapV4.Controllers
 {

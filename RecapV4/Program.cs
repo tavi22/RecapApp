@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using RecapV4.Models.Constants;
 using RecapV4.Models.Data;
 using RecapV4.Repositories;
+using RecapV4.Services.UserServices;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,6 +25,9 @@ builder.Services.AddAuthorization(options =>
     options.AddPolicy(UserRoleType.User, policy => policy.RequireRole(UserRoleType.User));
 
 });
+
+// Services
+builder.Services.AddScoped<IUserService, UserService>();
 
 builder.Services.AddAuthentication(auth =>
 {
