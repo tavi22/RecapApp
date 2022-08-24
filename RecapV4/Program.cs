@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using RecapV4.Models.Constants;
 using RecapV4.Models.Data;
@@ -16,12 +17,22 @@ builder.Services.AddDbContext<RecapContext>(options =>
 // Repositories
 builder.Services.AddScoped<IRepositoryWrapper, RepositoryWrapper>();
 
+// Auth
 builder.Services.AddAuthorization(options =>
 {
     options.AddPolicy(UserRoleType.Admin, policy => policy.RequireRole(UserRoleType.Admin));
     options.AddPolicy(UserRoleType.User, policy => policy.RequireRole(UserRoleType.User));
 
 });
+
+builder.Services.AddAuthentication(auth =>
+{
+    auth.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    auth.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    auth.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+
+})
+    .AddJwtBearer();
 
 
 builder.Services.AddControllers();
