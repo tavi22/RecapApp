@@ -1,13 +1,26 @@
 using Microsoft.EntityFrameworkCore;
+using RecapV4.Models.Constants;
 using RecapV4.Models.Data;
+using RecapV4.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
+// Database Connection
 builder.Services.AddDbContext<RecapContext>(options =>
 {
     options.UseSqlServer("Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=RecapDbV2;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False");
+});
+
+// Repositories
+builder.Services.AddScoped<IRepositoryWrapper, RepositoryWrapper>();
+
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy(UserRoleType.Admin, policy => policy.RequireRole(UserRoleType.Admin));
+    options.AddPolicy(UserRoleType.User, policy => policy.RequireRole(UserRoleType.User));
+
 });
 
 

@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using RecapV4.Models.Data;
 
-namespace RecapV4.Repositories.GenericRepository
+namespace RecapV4.Repositories
 {
     public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEntity : class
 

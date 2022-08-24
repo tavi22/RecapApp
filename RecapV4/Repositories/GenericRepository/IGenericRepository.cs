@@ -1,4 +1,4 @@
-﻿namespace RecapV4.Repositories.GenericRepository
+﻿namespace RecapV4.Repositories
 {
     public interface IGenericRepository<TEntity>
     {
