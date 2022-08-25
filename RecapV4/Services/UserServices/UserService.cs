@@ -1,9 +1,12 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.IdentityModel.Tokens;
 using RecapV4.Models.Constants;
 using RecapV4.Models.DTOs;
 using RecapV4.Models.Entities;
 using RecapV4.Repositories;
 using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 
 namespace RecapV4.Services.UserServices
 {
@@ -52,12 +55,43 @@ namespace RecapV4.Services.UserServices
                 var newJti = Guid.NewGuid().ToString();
 
                 var tokenHandler = new JwtSecurityTokenHandler();
+                var signinKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("custom secret key 250301"));
 
+                var token = GenerateJwtToken(signinKey, user, roles, tokenHandler, newJti);
 
+                return tokenHandler.WriteToken(token);
 
             }
 
             return "";
+        }
+
+        private SecurityToken GenerateJwtToken(SymmetricSecurityKey singinKey, User user,
+            List<string> roles, JwtSecurityTokenHandler tokenHandler, string jti)
+        {
+            var subject = new ClaimsIdentity(new Claim[]
+            {
+                new Claim(ClaimTypes.Email, user.Email),
+                new Claim(ClaimTypes.Name, user.FirstName + " " + user.LastName),
+                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+                new Claim(JwtRegisteredClaimNames.Jti, jti)
+            });
+
+            foreach(var role in roles)
+            {
+                subject.AddClaim(new Claim(ClaimTypes.Role, role));
+            }
+
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Subject = subject,
+                Expires = DateTime.Now.AddHours(1),
+                SigningCredentials = new SigningCredentials(singinKey, SecurityAlgorithms.HmacSha256)
+            };
+
+            var token = tokenHandler.CreateToken(tokenDescriptor);
+
+            return token;
         }
     }
 }
