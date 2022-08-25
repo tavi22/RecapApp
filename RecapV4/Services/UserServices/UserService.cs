@@ -33,7 +33,7 @@ namespace RecapV4.Services.UserServices
 
             if (result.Succeeded)
             {
-                await _userManager.AddToRoleAsync(newUser, UserRoleType.Admin);
+                await _userManager.AddToRoleAsync(newUser, UserRoleType.User);
 
                 return true;
             }
