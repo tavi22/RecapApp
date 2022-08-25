@@ -1,5 +1,4 @@
 ﻿using RecapV4.Models.Data;
-using RecapV4.Repositories;
 
 namespace RecapV4.Repositories
 {
@@ -7,6 +6,7 @@ namespace RecapV4.Repositories
     {
         private readonly RecapContext _context;
         private IUserRepository _user;
+        private ISessionTokenRepository _sessionToken;
 
         public RepositoryWrapper(RecapContext context)
         {
@@ -19,6 +19,15 @@ namespace RecapV4.Repositories
             {
                 if (_user == null) _user = new UserRepository(_context);
                 return _user;
+            }
+        }
+
+        public ISessionTokenRepository SessionToken
+        {
+            get
+            {
+                if (_sessionToken == null) _sessionToken = new SessionTokenRepository(_context);
+                return _sessionToken;
             }
         }
 

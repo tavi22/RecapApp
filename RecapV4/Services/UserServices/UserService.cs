@@ -27,6 +27,7 @@ namespace RecapV4.Services.UserServices
             newUser.Email = dto.Email;
             newUser.FirstName = dto.FirstName;
             newUser.LastName = dto.FirstName;
+            newUser.UserName = dto.UserName;
 
             var result = await _userManager.CreateAsync(newUser, dto.Password);
 
@@ -59,6 +60,9 @@ namespace RecapV4.Services.UserServices
 
                 var token = GenerateJwtToken(signinKey, user, roles, tokenHandler, newJti);
 
+                _repository.SessionToken.Create(new SessionToken(newJti, user.Id, token.ValidTo));
+                await _repository.SaveAsync();
+
                 return tokenHandler.WriteToken(token);
 
             }
@@ -85,7 +89,7 @@ namespace RecapV4.Services.UserServices
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = subject,
-                Expires = DateTime.Now.AddHours(1),
+                Expires = DateTime.Now.AddHours(24),
                 SigningCredentials = new SigningCredentials(singinKey, SecurityAlgorithms.HmacSha256)
             };
 

@@ -11,6 +11,8 @@ namespace RecapV4.Models.Data
     {
         public RecapContext(DbContextOptions options) : base (options) { }
 
+        public DbSet<SessionToken> SessionTokens { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);

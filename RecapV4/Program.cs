@@ -1,12 +1,15 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using RecapV4.Helpers;
 using RecapV4.Models.Constants;
 using RecapV4.Models.Data;
 using RecapV4.Models.Entities;
 using RecapV4.Repositories;
 using RecapV4.Seeders;
 using RecapV4.Services.UserServices;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -43,7 +46,23 @@ builder.Services.AddAuthentication(auth =>
     auth.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
 
 })
-    .AddJwtBearer();
+    .AddJwtBearer(options =>
+    {
+        options.SaveToken = true;
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = false,
+            ValidateAudience = false,
+            ValidateLifetime = true,
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("custom secret key 250301")),
+            ValidateIssuerSigningKey = true,
+
+        };
+        options.Events = new JwtBearerEvents()
+        {
+            OnTokenValidated = SessionTokenValidator.ValidateSessionToken
+        };
+    });
 
 builder.Services.AddScoped<SeedDb>();
 
@@ -75,6 +94,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseAuthentication();
 
 app.UseAuthorization();
 
