@@ -26,7 +26,7 @@ namespace RecapV4.Services.UserServices
             var newUser = new User();
             newUser.Email = dto.Email;
             newUser.FirstName = dto.FirstName;
-            newUser.LastName = dto.FirstName;
+            newUser.LastName = dto.LastName;
             newUser.UserName = dto.UserName;
 
             var result = await _userManager.CreateAsync(newUser, dto.Password);
