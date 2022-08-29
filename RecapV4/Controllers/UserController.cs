@@ -70,15 +70,9 @@ namespace RecapV4.Controllers
         [HttpPut("{id}")]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> UpdateUserById(int id, [FromBody] UserDTO newUser)
-        {
-            var user = await _repository.User.GetByIdAsync(id);
+        { 
 
-            if (user == null)
-            {
-                return NotFound("User does not exist!");
-            }
-
-            _repository.User.UpdateUserById(id, newUser, user);
+            _repository.User.UpdateUserById(id, newUser);
             await _repository.SaveAsync();
             return Ok();
         }

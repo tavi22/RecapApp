@@ -30,26 +30,25 @@ namespace RecapV4.Repositories
            return await _context.Users.FirstOrDefaultAsync(u => u.Email.Equals(email));
         }
 
-        public void UpdateUserById(int id, UserDTO newUser, User oldUser)
+        public async void UpdateUserById(int id, UserDTO newUser)
         {
-            oldUser.FirstName = newUser.FirstName;
-            oldUser.LastName = newUser.LastName;
-            oldUser.Email = newUser.Email;
-            oldUser.PhoneNumber = newUser.PhoneNumber;
-            oldUser.UserName = newUser.UserName;
-            oldUser.NormalizedUserName = newUser.UserName.Normalize();
-            oldUser.NormalizedEmail = newUser.Email.Normalize();
+            User oldUser = await _context.Users.FirstOrDefaultAsync(u => u.Id.Equals(id));
+
+            if (oldUser != null)
+            {
+                oldUser.FirstName = newUser.FirstName;
+                oldUser.LastName = newUser.LastName;
+                oldUser.Email = newUser.Email;
+                oldUser.PhoneNumber = newUser.PhoneNumber;
+                oldUser.UserName = newUser.UserName;
+                oldUser.NormalizedUserName = newUser.UserName.Normalize();
+                oldUser.NormalizedEmail = newUser.Email.Normalize();
+
+                Update(oldUser);
+                await _context.SaveChangesAsync();
+            }
+            
         }
 
-        public void CreateUser(User newUser, UserDTO dto)
-        {
-            newUser.FirstName = dto.FirstName;
-            newUser.LastName = dto.LastName;
-            newUser.Email = dto.Email;
-            newUser.PhoneNumber = dto.PhoneNumber;
-            newUser.UserName = dto.UserName;
-            newUser.NormalizedUserName = dto.UserName.Normalize();
-            newUser.NormalizedEmail = dto.Email.Normalize(); ;
-        }
     }
 }

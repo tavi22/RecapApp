@@ -6,6 +6,7 @@ namespace RecapV4.Repositories
     {
         IUserRepository User { get; }
         ISessionTokenRepository SessionToken { get; }
+        IAddressRepository Address { get;  }
         Task SaveAsync();
 
     }

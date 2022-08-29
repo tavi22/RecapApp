@@ -9,7 +9,6 @@ namespace RecapV4.Repositories
         Task<List<User>> GetAllUsers();
         Task<User> GetUserByEmail(string email);
         Task<User> GetByIdWithRoles(int id);
-        void UpdateUserById(int id, UserDTO newUser, User oldUser);
-        void CreateUser(User newUser, UserDTO dto);
+        void UpdateUserById(int id, UserDTO newUser);
     }
 }
