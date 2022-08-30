@@ -8,6 +8,7 @@ namespace RecapV4.Repositories
         private IUserRepository _user;
         private ISessionTokenRepository _sessionToken;
         private IAddressRepository _address;
+        private IProductRepository _product;
 
         public RepositoryWrapper(RecapContext context)
         {
@@ -38,6 +39,15 @@ namespace RecapV4.Repositories
             {
                 if (_address == null) _address = new AddressRepository(_context);
                 return _address;
+            }
+        }
+
+        public IProductRepository Product
+        {
+            get
+            {
+                if (_product == null) _product = new ProductRepository(_context);
+                return _product;
             }
         }
 
